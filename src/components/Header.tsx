@@ -3,7 +3,7 @@ import { toggleTheme } from '@/slice/ThemeSlice';
 import { Bell, Moon, Sun } from 'lucide-react';
 import pfp from '@/media/admin-pfp.jpg';
 import { toggleNotification } from '@/slice/NotificationSlice';
-import { Link, NavLink, Outlet } from 'react-router-dom'; 
+import { NavLink } from 'react-router-dom';
 
 function Header() {
     const dispatch = useDispatch();
@@ -18,38 +18,32 @@ function Header() {
     };
 
     return (
-        <div className={`w-full fixed h-16 p-6 ${theme === 'dark' ? 'bg-gray-950' : 'bg-gray-100'} gap-2 flex justify-between items-center`}>
-            <div className='flex justify-center items-center gap-10'>
-                <NavLink to="/dashboard" className="text-xl">
-                    <h3>Dashboard</h3>
+        <header className={`w-full fixed top-0 left-0 h-16 px-6 ${theme === 'dark' ? 'bg-gray-950' : 'bg-gray-100'} flex justify-between items-center z-10`}>
+            <nav className='flex justify-center items-center gap-10'>
+                <NavLink to="/" className={({ isActive }) => `text-xl ${isActive ? 'text-blue-500 font-bold' : ''}`}>
+                    Dashboard
                 </NavLink>
-                <NavLink to="/calendar" className="text-xl">
-                    <h3>Calendar</h3>
+                <NavLink to="/calendar" className={({ isActive }) => `text-xl ${isActive ? 'text-blue-500 font-bold' : ''}`}>
+                    Calendar
                 </NavLink>
-                <div className='w-full h-screeen'>
-                    <Outlet />
-                </div>
-            </div>
+            </nav>
 
             <div className='flex justify-center items-center gap-2'>
-                <div className='rounded-xl p-1 inline border-5 text-xs'>
-                    <button onClick={handleToggle}>
-                        {theme === 'light' ? <Moon /> : <Sun />}
-                    </button>
-                </div>
+                <button onClick={handleToggle} className='rounded-xl p-1 inline border-5 text-xs'>
+                    {theme === 'light' ? <Moon /> : <Sun />}
+                </button>
 
-                <div className='rounded-xl p-1 inline border-5 text-xs'>
-                    <button onClick={handleToggleNotification}>
-                        <Bell />
-                    </button>
-                </div>
+                <button onClick={handleToggleNotification} className='rounded-xl p-1 inline border-5 text-xs'>
+                    <Bell />
+                </button>
 
                 <div className='w-9 rounded-full'>
                     <img src={pfp} className='rounded-full' alt="Profile" />
                 </div>
             </div>
-        </div>
+        </header>
     );
 }
 
 export default Header;
+

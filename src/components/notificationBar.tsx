@@ -19,7 +19,7 @@ const NotificationBar = () => {
     console.log(notifications)
     
     return (
-        <div className={`w-full min-h-screen flex justify-end overflow-hidden`}>
+        <div className={`w-full flex justify-end overflow-hidden`}>
             {isOpen && (
                 <div className={`w-[300px] h-screen fixed top-16 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
                     <div className='w-full p-2 flex justify-between items-center'>

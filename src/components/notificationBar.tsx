@@ -21,7 +21,7 @@ const NotificationBar = () => {
     return (
         <div className={`w-full flex justify-end overflow-hidden`}>
             {isOpen && (
-                <div className={`w-[300px] h-screen fixed top-16 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}`}>
+                <div className={`w-[300px] h-screen fixed top-16 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-950'}`}>
                     <div className='w-full p-2 flex justify-between items-center'>
                         <h2 className='text-xl'>Notifications</h2>
                         <div className='text-2xl' onClick={handleClearNotification}>

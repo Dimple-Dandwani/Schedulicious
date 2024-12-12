@@ -24,7 +24,7 @@ const Card = ({ message, date, type, index }: CardProps) => {
   return (
     <>
       {((type === 'admin' && isAdminLoggedIn) || (type === 'user' && isUserLoggedIn)) && (
-        <div className={` ${theme === 'light' ? 'bg-white' : 'bg-gray-700' } min-h-[150px] m-2 bg rounded-xl shadow p-1.5`}>
+        <div className={` ${theme === 'light' ? 'bg-white' : 'bg-gray-900' } min-h-[150px] m-2 bg rounded-xl shadow p-2`}>
           <div className="flex justify-between">
             <div className="font-bold text-md">
               <p>{type === 'admin' ? 'Admin Notification' : 'User Notification'}</p>

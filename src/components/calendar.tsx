@@ -1,32 +1,38 @@
 import React, { useState } from 'react'
-import { Calendar as BigCalendar, dateFnsLocalizer, Views } from 'react-big-calendar'
+import { Calendar as BigCalendar, dateFnsLocalizer, View, NavigateAction } from 'react-big-calendar'
 import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
-/* import enUS from 'date-fns/locale/en-US' */
+import { enUS } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
- /* const locales = {
+const locales = {
   'en-US': enUS,
-} */
+}
 
 const localizer = dateFnsLocalizer({
   format,
   parse,
   startOfWeek,
   getDay,
-  /* locales, */
+  locales,
 })
 
-type CalendarView = 'threeMonths' | 'year' | 'month' | 'week'
+type CalendarView = View | 'threeMonths'
+
+interface CustomToolbarProps {
+  onView: (view: View) => void
+  onNavigate: (action: NavigateAction) => void
+  label: string
+}
 
 const Calendar: React.FC = () => {
-  const [view, setView] = useState<CalendarView>('threeMonths')
+  const [view, setView] = useState<CalendarView>('month')
   const [date, setDate] = useState(new Date())
 
-  const handleViewChange = (newView: CalendarView) => {
-    setView(newView)
+  const handleViewChange = (newView: View) => {
+    setView(newView === 'agenda' ? 'month' : newView)
   }
 
-  const ThreeMonthView = ({ date }: { date: Date }) => (
+  const ThreeMonthView: React.FC<{ date: Date }> = ({ date }) => (
     <div className="flex flex-wrap justify-center">
       {[-1, 0, 1].map((offset) => (
         <div key={offset} className="w-full md:w-1/3 p-2">
@@ -45,7 +51,7 @@ const Calendar: React.FC = () => {
     </div>
   )
 
-  const CustomToolbar = ({ onView, onNavigate, label }: any) => (
+  const CustomToolbar: React.FC<CustomToolbarProps> = ({ onView, onNavigate, label }) => (
     <div className="flex justify-between items-center mb-4">
       <div>
         <button onClick={() => onNavigate('PREV')} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
@@ -57,17 +63,17 @@ const Calendar: React.FC = () => {
       </div>
       <h2 className="text-xl font-bold">{label}</h2>
       <div>
-        <button onClick={() => handleViewChange('threeMonths')} className="px-4 py-2 bg-green-500 text-white rounded mr-2">
-          3 Months
-        </button>
-        <button onClick={() => handleViewChange('year')} className="px-4 py-2 bg-green-500 text-white rounded mr-2">
-          Year
-        </button>
-        <button onClick={() => handleViewChange('month')} className="px-4 py-2 bg-green-500 text-white rounded mr-2">
+        <button onClick={() => onView('month')} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
           Month
         </button>
-        <button onClick={() => handleViewChange('week')} className="px-4 py-2 bg-green-500 text-white rounded">
+        <button onClick={() => onView('week')} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
           Week
+        </button>
+        <button onClick={() => onView('day')} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
+          Day
+        </button>
+        <button onClick={() => setView('threeMonths')} className="px-4 py-2 bg-blue-500 text-white rounded">
+          3 Months
         </button>
       </div>
     </div>
@@ -80,7 +86,8 @@ const Calendar: React.FC = () => {
         {view === 'threeMonths' ? (
           <>
             <CustomToolbar
-              onNavigate={(action: 'PREV' | 'NEXT') => setDate(action === 'PREV' ? subMonths(date, 3) : addMonths(date, 3))}
+              onView={handleViewChange}
+              onNavigate={(action: NavigateAction) => setDate(action === 'PREV' ? subMonths(date, 3) : addMonths(date, 3))}
               label={`${format(subMonths(date, 1), 'MMMM yyyy')} - ${format(addMonths(date, 1), 'MMMM yyyy')}`}
             />
             <ThreeMonthView date={date} />
@@ -92,8 +99,8 @@ const Calendar: React.FC = () => {
             startAccessor="start"
             endAccessor="end"
             style={{ height: 600 }}
-            view={view === 'year' ? Views.YEAR : view}
-            onView={() => {}}
+            view={view as View}
+            onView={handleViewChange}
             date={date}
             onNavigate={setDate}
             components={{

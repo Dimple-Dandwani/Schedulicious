@@ -22,14 +22,15 @@ const localizer = dateFnsLocalizer({
   locales,
 })
 
-interface Appointment {
+export interface Appointment {
   id: string;
   user: string;
   admin: string;
   start: Date;
   end: Date;
-  status: 'pending' | 'confirmed' | 'cancelled';
+  status: 'pending' | 'confirmed' | 'completed' | 'canceled';  
 }
+
 
 const Calendar: React.FC = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const Calendar: React.FC = () => {
     status: 'pending',
   });
 
-/*   const handleAddAppointment = () => {
+  const handleAddAppointment = () => {
     if (newAppointment.user && newAppointment.admin && newAppointment.start && newAppointment.end) {
       const appointmentToAdd = {
         ...newAppointment,
@@ -62,7 +63,7 @@ const Calendar: React.FC = () => {
         status: 'pending',
       });
     }
-  }; */
+  };
 
   const handleSelectEvent = (event: Appointment) => {
     setSelectedAppointment(event);
@@ -76,14 +77,14 @@ const Calendar: React.FC = () => {
       setSelectedAppointment(null);
     }
   };
-/* 
+
   const handleUpdateAppointment = () => {
     if (selectedAppointment) {
       dispatch(updateAppointment(selectedAppointment));
       setIsDialogOpen(false);
       setSelectedAppointment(null);
     }
-  }; */
+  };
 
   return (
     <div className="p-6">
@@ -106,14 +107,15 @@ const Calendar: React.FC = () => {
             setSelectedAppointment(null);
             setIsDialogOpen(true);
           }}
-          className="mt-4"
+          className="mt-4 "
         >
           Add Appointment
         </Button>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+      <Dialog open={isDialogOpen}  onOpenChange={setIsDialogOpen}>
+
+        <DialogContent className='bg-white'>
           <DialogHeader>
             <DialogTitle>{selectedAppointment ? 'Edit Appointment' : 'Add New Appointment'}</DialogTitle>
           </DialogHeader>
@@ -185,10 +187,10 @@ const Calendar: React.FC = () => {
                 <Button variant="destructive" onClick={handleDeleteAppointment}>
                   Delete
                 </Button>
-                <Button /* onClick={handleUpdateAppointment} */>Save Changes</Button>
+                <Button onClick={handleUpdateAppointment}>Save Changes</Button>
               </>
             ) : (
-              <Button/*  onClick={handleAddAppointment} */>Add Appointment</Button>
+              <Button onClick={handleAddAppointment}>Add Appointment</Button>
             )}
           </DialogFooter>
         </DialogContent>
@@ -198,4 +200,3 @@ const Calendar: React.FC = () => {
 };
 
 export default Calendar;
-
